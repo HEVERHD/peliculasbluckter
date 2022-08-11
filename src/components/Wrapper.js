@@ -1,5 +1,3 @@
-import { eventWrapper } from "@testing-library/user-event/dist/utils";
-
 export default function Wrapper(props) {
   return (
     <>
