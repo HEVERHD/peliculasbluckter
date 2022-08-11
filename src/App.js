@@ -1,24 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Pelicula from "./components/peliculas";
+import Wrapper from "./components/Wrapper";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [peliculas, setPeliculas] = useState([]);
+
+  useEffect(() => {
+    const enPoint =
+      "https://api.themoviedb.org/3/discover/movie?api_key=eb42fd1735381027e43257fb869cd9ad&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate";
+
+    axios
+      .get(enPoint)
+      .then((res) => {
+        const apiData = res.data;
+        setPeliculas(apiData.results);
+        console.log(apiData.results);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Wrapper>
+        {peliculas.map((peliculas, index) => (
+          <>
+            <Pelicula
+              key={index}
+              img={peliculas.poster_path}
+              titulo={peliculas.title}
+              calificacion={peliculas.vote_average}
+              popularidad={peliculas.popularity}
+              lanzamiento={peliculas.release_date}
+              descripcion={peliculas.overview}
+              duracion={peliculas.duracion}
+            ></Pelicula>
+          </>
+        ))}
+      </Wrapper>
+    </>
   );
 }
 
